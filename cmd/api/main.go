@@ -2,12 +2,13 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
-	"net/http"
+	"github.com/labstack/echo/v4/middleware"
 	"os"
-	"fmt"
 	"github.com/joho/godotenv"
 	"budgetting-app/common"
 	"budgetting-app/cmd/api/handlers"
+	"budgetting-app/cmd/api/middlewares"
+	"fmt"
 )
 
 type Application struct {
@@ -23,12 +24,9 @@ func main() {
 	db, err := common.NewMySQL()
 
 	if err != nil {
-		e.Logger.Fatal("Error loading .env file")
+		e.Logger.Fatal("Error loading .env file, Error : ", err.Error())
 	}
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
 
 	h := handlers.Handler{
 		DB: db,
@@ -40,7 +38,10 @@ func main() {
 		handler: h,
 	}
 
-	fmt.Println(app)
+	e.Use(middlewares.CustomMiddleware, middleware.Logger(), middlewares.AnotherMiddleware)
+
+	app.routes(h)
+
 	port := os.Getenv("APP_PORT")
 	appAddress := fmt.Sprintf("localhost:%s", port)
 	e.Logger.Fatal(e.Start(appAddress))
