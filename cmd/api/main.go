@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"os"
 	"github.com/joho/godotenv"
-	"budgetting-app/common"
+	"budgetting-app/internal/common"
 	"budgetting-app/cmd/api/handlers"
 	"budgetting-app/cmd/api/middlewares"
 	"fmt"
