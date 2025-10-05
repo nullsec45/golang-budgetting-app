@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"os"
 	"github.com/joho/godotenv"
-	"budgetting-app/internal/common"
+	"budgetting-app/common"
 	"budgetting-app/cmd/api/handlers"
 	"budgetting-app/cmd/api/middlewares"
 	"fmt"
@@ -21,11 +21,13 @@ func main() {
 	e := echo.New()
 	err := godotenv.Load()
 
-	db, err := common.NewMySQL()
-
 	if err != nil {
 		e.Logger.Fatal("Error loading .env file, Error : ", err.Error())
 	}
+	
+	db, err := common.NewMySQL()
+
+	
 
 
 	h := handlers.Handler{
