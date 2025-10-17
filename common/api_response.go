@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+type ApiResponse map[string]any
+
+type JSONSuccessResponse struct {
+	Success bool `json:"success"`
+	Message string `json:"message"`
+	Data interface{} `json:"data"`
+}
+
 type ValidationError struct {
 	Error     string  `json:"error"`
 	Key       string  `json:"key"`
@@ -20,6 +28,14 @@ type JSONFailedValidationResponse struct {
 	Success bool               `json:"success"`
 	Message string             `json:"message"`
 	Errors  []*ValidationError `json:"errors"`
+}
+
+func SendSuccessResponse(c echo.Context, message string, data interface{}) error {
+	return c.JSON(http.StatusOK, JSONSuccessResponse{
+		Success:true,
+		Message:message,
+		Data:data,
+	})
 }
 
 func SendFailedValidationResponse(c echo.Context, errors []*ValidationError) error {
@@ -39,4 +55,8 @@ func SendErrorResponse(c echo.Context, message string, statusCode int) error {
 
 func SendBadRequestResponse(c echo.Context, message string) error {
 	return SendErrorResponse(c, message, http.StatusBadRequest)
+}
+
+func SendNotFoundResponse(c echo.Context, message string) error {
+	return SendErrorResponse(c, message, http.StatusNotFound)
 }
