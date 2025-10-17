@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
-	"net/http"
 	"budgetting-app/cmd/api/requests"
 	// "github.com/go-playground/validator/v10"
 	"budgetting-app/common"
@@ -12,6 +11,7 @@ func (h *Handler) RegisterHandler(c echo.Context) error {
 	payload := new(requests.RegisterUserRequest)	
 
 	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
+		c.Logger().Error(err)
 		return common.SendBadRequestResponse(c, err.Error())
 	}
 
@@ -28,5 +28,5 @@ func (h *Handler) RegisterHandler(c echo.Context) error {
 	// validationErrors := err.(validator.ValidationErrors)
 	// c.Logger().Print(validationErrors)
 
-	return c.String(http.StatusOK, "good request")
+	return common.SendSuccessResponse(c, "User registration successfull", nil)
 }
