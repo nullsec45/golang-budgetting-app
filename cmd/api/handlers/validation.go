@@ -10,12 +10,6 @@ import (
 	"fmt"
 )
 
-type ValidationError struct {
-	Error string `json:"error"`
-	Key   string `json:"key"`
-	Condition string `json:"condition"`
-}
-
 func (h *Handler) ValidateBodyRequest(c echo.Context, payload interface{})[]*common.ValidationError{
 	var validate *validator.Validate
 	validate = validator.New(validator.WithRequiredStructEnabled())
